@@ -7,12 +7,11 @@ A customizable confirmation dialog with timeout functionality for Python applica
 - Customizable message and title
 - Countdown timer display
 - Auto-cancel functionality after timeout
-- Yes/No buttons
+- Yes/No buttons (default) or custom buttons with callbacks
 - Dark theme by default (customizable background)
 - Escape key support for quick cancellation
 - Modal dialog behavior
 - Centered window positioning
-- Optional state management support
 
 ## Installation
 
@@ -44,42 +43,51 @@ else:
     print("User clicked No or dialog timed out")
 ```
 
+### Custom Buttons Example
+
+You can also create a dialog with custom buttons and callbacks:
+
+```python
+from confirmation_dialog import ConfirmationDialog
+
+def on_confirm():
+    print("Confirm button clicked")
+
+def on_reject():
+    print("Reject button clicked")
+
+def on_remember_later():
+    print("Remember me later button clicked")
+
+# Create a dialog with custom buttons
+dialog = ConfirmationDialog(
+    message="Would you like to save your preferences?",
+    title="Save Preferences",
+    custom_buttons=[
+        ("Confirm", on_confirm),
+        ("Reject", on_reject),
+        ("Remember me later", on_remember_later)
+    ]
+)
+
+# Show the dialog
+dialog.show_up()
+
 ### Parameters
 
 - `message` (str): The message to display in the dialog (default: "Do you want to continue?")
 - `title` (str): The window title (default: "Confirmation")
 - `background` (str): The background color in hex format (default: "#121212")
 - `timeout` (int): Timeout duration in milliseconds before auto-cancel (default: 15000)
+- `custom_buttons` (List[Tuple[str, Callable]]): Optional list of tuples containing (button_label, callback_function).
+  If provided, these buttons will be shown instead of the default Yes/No buttons.
 
 ### Return Value
 
 The `show_up()` method returns:
-- `True` if the user clicks "Yes"
-- `False` if the user clicks "No", presses Escape, or the dialog times out
-
-## Advanced Usage: State Management
-
-For applications that need to track dialog state, you can implement the optional `StateManagerInterface`:
-
-```python
-from confirmation_dialog import ConfirmationDialog, StateManagerInterface
-
-# Create a state manager that implements the StateManagerInterface
-class MyStateManager(StateManagerInterface):
-    def set(self, key: str, value: any) -> None:
-        # Implement your state management logic here
-        pass
-
-# Create a confirmation dialog with state management
-dialog = ConfirmationDialog(
-    message="Do you want to proceed with the operation?",
-    state_manager=MyStateManager()  # Optional: provide a state manager
-)
-
-result = dialog.show_up()
-```
-
-The state manager will track the last confirmation result under the key "last_confirmation".
+- `True` if the user clicks "Yes" (when using default buttons)
+- `False` if the user clicks "No", presses Escape, or the dialog times out (when using default buttons)
+- When using custom buttons, the return value is always `None` as the callbacks handle the actions
 
 ## Requirements
 
