@@ -39,11 +39,52 @@ class ConfirmationDialog():
         btn_frame = tk.Frame(self.root, bg=background)
         btn_frame.pack(pady=10)
         
-        # Yes and No buttons.
-        yes_button = tk.Button(btn_frame, text="Yes", command=self.on_yes, font=("Arial", 12))
-        yes_button.pack(side=tk.LEFT, padx=5)
-        no_button = tk.Button(btn_frame, text="No", command=self.on_no, font=("Arial", 12))
-        no_button.pack(side=tk.LEFT, padx=5)
+        # Define button styles
+        button_style = {
+            'font': ('Arial', 12, 'bold'),
+            'width': 8,
+            'relief': 'flat',
+            'borderwidth': 0,
+            'cursor': 'hand2'
+        }
+        
+        # Yes button with neutral styling
+        yes_button = tk.Button(
+            btn_frame,
+            text="Yes",
+            command=self.on_yes,
+            bg="#424242",  # Dark gray color
+            fg="white",
+            activebackground="#303030",  # Even darker gray on hover
+            activeforeground="white",
+            **button_style
+        )
+        yes_button.pack(side=tk.LEFT, padx=10)
+        
+        # No button with neutral styling
+        no_button = tk.Button(
+            btn_frame,
+            text="No",
+            command=self.on_no,
+            bg="#424242",  # Same dark gray color
+            fg="white",
+            activebackground="#303030",  # Same darker gray on hover
+            activeforeground="white",
+            **button_style
+        )
+        no_button.pack(side=tk.LEFT, padx=10)
+        
+        # Add hover effects
+        def on_enter(e, button, color):
+            button['bg'] = color
+        
+        def on_leave(e, button, color):
+            button['bg'] = color
+        
+        yes_button.bind("<Enter>", lambda e: on_enter(e, yes_button, "#303030"))
+        yes_button.bind("<Leave>", lambda e: on_leave(e, yes_button, "#424242"))
+        no_button.bind("<Enter>", lambda e: on_enter(e, no_button, "#303030"))
+        no_button.bind("<Leave>", lambda e: on_leave(e, no_button, "#424242"))
         
         # Start updating the countdown.
         self.update_countdown()
