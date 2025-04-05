@@ -35,7 +35,7 @@ class ConfirmationDialog():
             title_bar,
             text=title,
             bg="#1a1a1a",
-            fg="white",
+            fg="#b0b0b0",  # Softer white/gray
             font=("Arial", 10, "bold"),
             padx=10
         )
@@ -46,7 +46,7 @@ class ConfirmationDialog():
             title_bar,
             text="×",
             bg="#1a1a1a",
-            fg="white",
+            fg="#b0b0b0",  # Softer white/gray
             font=("Arial", 12, "bold"),
             relief='flat',
             bd=0,
@@ -57,8 +57,8 @@ class ConfirmationDialog():
         close_button.pack(side=tk.RIGHT)
         
         # Add hover effects for close button
-        close_button.bind("<Enter>", lambda e: close_button.configure(bg="#e81123"))
-        close_button.bind("<Leave>", lambda e: close_button.configure(bg="#1a1a1a"))
+        close_button.bind("<Enter>", lambda e: close_button.configure(bg="#e81123", fg="white"))
+        close_button.bind("<Leave>", lambda e: close_button.configure(bg="#1a1a1a", fg="#b0b0b0"))
         
         # Make window draggable
         def start_move(event):
@@ -93,11 +93,11 @@ class ConfirmationDialog():
         self.remaining = timeout // 1000  # countdown in seconds
 
         # Create the message label.
-        self.message_label = tk.Label(self.root, text=message, font=("Arial", 14), fg="white", bg=background)
+        self.message_label = tk.Label(self.root, text=message, font=("Arial", 14), fg="#e0e0e0", bg=background)  # Softer white
         self.message_label.pack(padx=20, pady=(10, 5))
         
         # Create a countdown label.
-        self.countdown_label = tk.Label(self.root, text=f"Auto-cancel in {self.remaining} seconds", font=("Arial", 12), fg="white", bg=background)
+        self.countdown_label = tk.Label(self.root, text=f"Auto-cancel in {self.remaining} seconds", font=("Arial", 12), fg="#b0b0b0", bg=background)  # Softer white/gray
         self.countdown_label.pack(pady=(0, 10))
         
         # Create a frame for buttons.
@@ -119,9 +119,9 @@ class ConfirmationDialog():
             text="Yes",
             command=self.on_yes,
             bg="#424242",  # Dark gray color
-            fg="white",
+            fg="#e0e0e0",  # Softer white
             activebackground="#303030",  # Even darker gray on hover
-            activeforeground="white",
+            activeforeground="#ffffff",  # Brighter white on hover
             **button_style
         )
         yes_button.pack(side=tk.LEFT, padx=10)
@@ -132,9 +132,9 @@ class ConfirmationDialog():
             text="No",
             command=self.on_no,
             bg="#424242",  # Same dark gray color
-            fg="white",
+            fg="#e0e0e0",  # Softer white
             activebackground="#303030",  # Same darker gray on hover
-            activeforeground="white",
+            activeforeground="#ffffff",  # Brighter white on hover
             **button_style
         )
         no_button.pack(side=tk.LEFT, padx=10)
@@ -142,9 +142,11 @@ class ConfirmationDialog():
         # Add hover effects
         def on_enter(e, button, color):
             button['bg'] = color
+            button['fg'] = "#ffffff"  # Brighter white on hover
         
         def on_leave(e, button, color):
             button['bg'] = color
+            button['fg'] = "#e0e0e0"  # Softer white on leave
         
         yes_button.bind("<Enter>", lambda e: on_enter(e, yes_button, "#303030"))
         yes_button.bind("<Leave>", lambda e: on_leave(e, yes_button, "#424242"))
