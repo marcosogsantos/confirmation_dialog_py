@@ -109,11 +109,13 @@ class ConfirmationDialog():
         
         # Define button styles
         button_style = {
-            'font': ('Arial', 12, 'bold'),
-            'width': 8,
+            'font': ('Arial', 10, 'bold'),
             'relief': 'flat',
             'borderwidth': 0,
-            'cursor': 'hand2'
+            'cursor': 'hand2',
+            'padx': 15,  # Horizontal padding
+            'pady': 8,   # Vertical padding
+            'anchor': 'center'  # Center text in button
         }
         
         if custom_buttons:
