@@ -23,6 +23,71 @@ class ConfirmationDialog():
         self.root.title(title)
         self.root.attributes("-topmost", True)
         
+        # Remove default title bar
+        self.root.overrideredirect(True)
+        
+        # Create custom title bar
+        title_bar = tk.Frame(self.root, bg="#1a1a1a", relief='flat', bd=0)
+        title_bar.pack(fill=tk.X, side=tk.TOP)
+        
+        # Title label
+        title_label = tk.Label(
+            title_bar,
+            text=title,
+            bg="#1a1a1a",
+            fg="white",
+            font=("Arial", 10, "bold"),
+            padx=10
+        )
+        title_label.pack(side=tk.LEFT)
+        
+        # Close button
+        close_button = tk.Button(
+            title_bar,
+            text="×",
+            bg="#1a1a1a",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            relief='flat',
+            bd=0,
+            command=self.on_no,
+            padx=10,
+            cursor="hand2"
+        )
+        close_button.pack(side=tk.RIGHT)
+        
+        # Add hover effects for close button
+        close_button.bind("<Enter>", lambda e: close_button.configure(bg="#e81123"))
+        close_button.bind("<Leave>", lambda e: close_button.configure(bg="#1a1a1a"))
+        
+        # Make window draggable
+        def start_move(event):
+            self.x = event.x
+            self.y = event.y
+
+        def stop_move(event):
+            self.x = None
+            self.y = None
+
+        def do_move(event):
+            if self.x is not None and self.y is not None:
+                deltax = event.x - self.x
+                deltay = event.y - self.y
+                x = self.root.winfo_x() + deltax
+                y = self.root.winfo_y() + deltay
+                self.root.geometry(f"+{x}+{y}")
+        
+        title_bar.bind('<Button-1>', start_move)
+        title_bar.bind('<ButtonRelease-1>', stop_move)
+        title_bar.bind('<B1-Motion>', do_move)
+        
+        title_label.bind('<Button-1>', start_move)
+        title_label.bind('<ButtonRelease-1>', stop_move)
+        title_label.bind('<B1-Motion>', do_move)
+        
+        self.x = None
+        self.y = None
+        
         self.result = None
         self.timeout = timeout
         self.remaining = timeout // 1000  # countdown in seconds
