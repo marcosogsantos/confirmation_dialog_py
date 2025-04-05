@@ -1,8 +1,8 @@
 from typing import Protocol, runtime_checkable
 
 @runtime_checkable
-class AppStateInterface(Protocol):
-    """Interface for app state objects that can store key-value pairs."""
+class StateManagerInterface(Protocol):
+    """Interface for state manager objects that can store key-value pairs."""
     
     def set(self, key: str, value: any) -> None:
         """

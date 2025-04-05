@@ -12,6 +12,7 @@ A customizable confirmation dialog with timeout functionality for Python applica
 - Escape key support for quick cancellation
 - Modal dialog behavior
 - Centered window positioning
+- Optional state management support
 
 ## Installation
 
@@ -19,7 +20,7 @@ A customizable confirmation dialog with timeout functionality for Python applica
 pip install git+https://github.com/marcosogsantos/confirmation_dialog_py.git
 ```
 
-## Usage
+## Basic Usage
 
 Here's a simple example of how to use the confirmation dialog:
 
@@ -55,6 +56,30 @@ else:
 The `show_up()` method returns:
 - `True` if the user clicks "Yes"
 - `False` if the user clicks "No", presses Escape, or the dialog times out
+
+## Advanced Usage: State Management
+
+For applications that need to track dialog state, you can implement the optional `StateManagerInterface`:
+
+```python
+from confirmation_dialog import ConfirmationDialog, StateManagerInterface
+
+# Create a state manager that implements the StateManagerInterface
+class MyStateManager(StateManagerInterface):
+    def set(self, key: str, value: any) -> None:
+        # Implement your state management logic here
+        pass
+
+# Create a confirmation dialog with state management
+dialog = ConfirmationDialog(
+    message="Do you want to proceed with the operation?",
+    state_manager=MyStateManager()  # Optional: provide a state manager
+)
+
+result = dialog.show_up()
+```
+
+The state manager will track the last confirmation result under the key "last_confirmation".
 
 ## Requirements
 
