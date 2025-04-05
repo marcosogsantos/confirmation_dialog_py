@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="confirmation_dialog",
-    version="0.1.2",
+    version="0.1.3",
     author="Marcos Santos",
     author_email="@marcosogs",
     description="A simple Python package for creating confirmation dialogs",
