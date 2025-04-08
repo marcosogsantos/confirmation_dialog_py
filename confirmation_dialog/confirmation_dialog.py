@@ -8,7 +8,8 @@ class ConfirmationDialog():
         title="Confirmation Dialog", 
         background="#121212", 
         timeout=15000,
-        custom_buttons: Optional[List[Tuple[str, Callable[[], None]]]] = None
+        custom_buttons: Optional[List[Tuple[str, Callable[[], None]]]] = None,
+        monitor_index: int = 0
     ):
         """
         A custom confirmation dialog with a timeout that auto-cancels if no response is provided,
@@ -20,6 +21,7 @@ class ConfirmationDialog():
         :param timeout: Timeout in milliseconds before auto-cancel.
         :param custom_buttons: Optional list of tuples containing (button_label, callback_function).
                               If provided, these buttons will be shown instead of the default Yes/No buttons.
+        :param monitor_index: Index of the monitor to display the dialog on (0-based). Defaults to 0 (primary monitor).
         """
         self.root = tk.Tk()
         self.root.configure(bg=background)
@@ -185,10 +187,44 @@ class ConfirmationDialog():
         self.root.after(self.timeout, self.on_timeout)
         self.root.bind("<Escape>", lambda e: self.on_no())
         
-        # Center the dialog relative to the parent.
+        # Center the dialog on the specified monitor
+        self.center_on_monitor(monitor_index)
+
+    def center_on_monitor(self, monitor_index: int = 0):
+        """Center the window on the specified monitor."""
+        # Get screen information
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        
+        # Update window geometry
         self.root.update_idletasks()
-        x = self.root.winfo_rootx() + (self.root.winfo_width() // 2) - (self.root.winfo_width() // 2)
-        y = self.root.winfo_rooty() + (self.root.winfo_height() // 2) - (self.root.winfo_height() // 2)
+        width = self.root.winfo_width()
+        height = self.root.winfo_height()
+        
+        # Calculate position to center on screen
+        x = (screen_width - width) // 2
+        y = (screen_height - height) // 2
+        
+        # On multi-monitor setups, we need to adjust the position
+        try:
+            # Try to get the number of monitors and their positions
+            from tkinter import Tk
+            temp_root = Tk()
+            temp_root.withdraw()  # Hide the temporary window
+            
+            # Get the number of monitors
+            monitors = temp_root.tk.call('winfo', 'screen', '.')
+            if monitors > 1:
+                # Get the monitor dimensions
+                monitor_width = screen_width // monitors
+                # Adjust x position based on monitor index
+                x = (monitor_width * monitor_index) + ((monitor_width - width) // 2)
+            
+            temp_root.destroy()
+        except:
+            # If anything fails, just center on the primary monitor
+            pass
+        
         self.root.geometry(f"+{x}+{y}")
 
     def update_countdown(self):
